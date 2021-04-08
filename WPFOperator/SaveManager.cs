@@ -10,6 +10,18 @@ using WPFOperator.Models;
 
 namespace WPFOperator
 {
+    /*
+     * Save/Load operations class
+     * 
+     * Saves objects:
+     *      CardMaster
+     *      Employers
+     *      Cards
+     *      CardTypes
+     *      Employers Archive
+     *      Cards Archive
+     *      UserSettings
+     */
     class SaveManager
     {
         public LauncherKeyObject LoadKey()
