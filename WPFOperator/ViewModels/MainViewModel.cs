@@ -111,9 +111,15 @@ namespace WPFOperator.ViewModels
             
 
             
-            ApplicationDirection = Directory.GetCurrentDirectory() + "/Media/" + CurrentSelectedBackground + ".mp4";
-
-
+            ApplicationDirection = Directory.GetCurrentDirectory();
+            DirectoryInfo DI = new DirectoryInfo(ApplicationDirection);
+            int searchDirectionCount = 0;
+            while (DI.Name != "SRPDOM" && searchDirectionCount != 5)
+            {
+                DI = DI.Parent;
+                searchDirectionCount++;
+            }
+            ApplicationDirection = DI.FullName + "\\Resources\\" + CurrentSelectedBackground + ".mp4";
         }
 
         public void SaveLoadEmployers()
