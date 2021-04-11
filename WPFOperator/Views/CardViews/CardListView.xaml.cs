@@ -63,6 +63,32 @@ namespace WPFOperator.Views
         public static readonly DependencyProperty IsChildWindowClosedProperty =
             DependencyProperty.Register("IsChildWindowClosed", typeof(bool), typeof(CardListView), new PropertyMetadata(true));*/
 
+
+
+        public bool IsCalendarBeginEnabled
+        {
+            get { return (bool)GetValue(IsCalendarBeginEnabledProperty); }
+            set { SetValue(IsCalendarBeginEnabledProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsCalendarBeginEnabled.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsCalendarBeginEnabledProperty =
+            DependencyProperty.Register("IsCalendarBeginEnabled", typeof(bool), typeof(CardListView), new PropertyMetadata(false));
+
+
+
+        public bool IsCalendareEndEnabled
+        {
+            get { return (bool)GetValue(IsCalendareEndEnabledProperty); }
+            set { SetValue(IsCalendareEndEnabledProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsCalendareEndEnabled.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsCalendareEndEnabledProperty =
+            DependencyProperty.Register("IsCalendareEndEnabled", typeof(bool), typeof(CardListView), new PropertyMetadata(false));
+
+
+
         public string CurrentDate
         {
             get { return (string)GetValue(CurrentDateProperty); }
@@ -359,6 +385,53 @@ namespace WPFOperator.Views
                 MainMenuView MMV = new MainMenuView();
                 MMV.DataContext = DataContext;
                 MMV.Show();
+            }
+        }
+
+        private void SetBeginDate_Click(object sender, RoutedEventArgs e)
+        {
+            IsCalendarBeginEnabled = !IsCalendarBeginEnabled;
+
+            if (IsCalendarBeginEnabled) CalendarBeginDate.Visibility = Visibility.Visible;
+            else CalendarBeginDate.Visibility = Visibility.Hidden;
+        }
+
+        private void SetEndDate_Click(object sender, RoutedEventArgs e)
+        {
+            IsCalendareEndEnabled = !IsCalendareEndEnabled;
+
+            if (IsCalendareEndEnabled) CalendarEndDate.Visibility = Visibility.Visible;
+            else CalendarEndDate.Visibility = Visibility.Hidden;
+        }
+
+        private void CalendarBeginDate_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DateTime dtb = CalendarBeginDate.SelectedDate.Value;
+
+            if (dtb != null)
+            {
+                // + "/" + dtb.Month + "/" + dtb.Day;
+                TextDateActionsBegin.Text = dtb.Year + "/";
+                if (dtb.Month < 10) TextDateActionsBegin.Text += "0";
+                TextDateActionsBegin.Text += dtb.Month + "/";
+
+                if (dtb.Day < 10) TextDateActionsBegin.Text += "0";
+                TextDateActionsBegin.Text += dtb.Day;
+            }
+        }
+
+        private void CalendarEndDate_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DateTime dte = CalendarEndDate.SelectedDate.Value;
+
+            if (dte != null)
+            {
+                TextDateActionsEnd.Text = dte.Year + "/";
+                if (dte.Month < 10) TextDateActionsEnd.Text += "0";
+                TextDateActionsEnd.Text += dte.Month + "/";
+
+                if (dte.Day < 10) TextDateActionsEnd.Text += "0";
+                TextDateActionsEnd.Text += dte.Day;
             }
         }
     }

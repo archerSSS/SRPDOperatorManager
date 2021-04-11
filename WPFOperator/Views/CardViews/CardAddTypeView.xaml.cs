@@ -32,18 +32,18 @@ namespace WPFOperator.Views.CardViews
             {
                 ((MainViewModel)DataContext).AddNewType(TextType.Text);
 
-                MainMenuView MMV = new MainMenuView();
+                /*MainMenuView MMV = new MainMenuView();
                 MMV.DataContext = DataContext;
                 MMV.Show();
-                Close();
+                Close();*/
             }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            MainMenuView MMV = new MainMenuView();
+            /*MainMenuView MMV = new MainMenuView();
             MMV.DataContext = DataContext;
-            MMV.Show();
+            MMV.Show();*/
             Close();
         }
 

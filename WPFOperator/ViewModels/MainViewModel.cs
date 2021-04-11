@@ -83,7 +83,7 @@ namespace WPFOperator.ViewModels
             uStatus = manager.LoadUserStatus();
             UStatus.CheckLastRun(DateTime.Now);
             Rank = UStatus.Rank;
-            //UStatus.Value = 180;
+            
             CollectedBits = UStatus.Value;
             SimpleOn = UStatus.FancyButtonsOff;
             FancyOn = UStatus.FancyButtonsOn;
@@ -91,7 +91,7 @@ namespace WPFOperator.ViewModels
             FancyVisibility = FancyOn ? Visibility.Visible : Visibility.Hidden;
             CurrentSelectedBackground = UStatus.CurrentBackground;
             //Rank = "Бриллиантовая карта";
-            //SaveUserStatus();
+            
             /*Console.WriteLine("FancyButtons: " + UStatus.FancyButtons + "");
             Console.WriteLine("FancyOn: " + UStatus.FancyButtonsOn + "");
             Console.WriteLine("FancyOff: " + UStatus.FancyButtonsOff + "");
@@ -106,11 +106,14 @@ namespace WPFOperator.ViewModels
 
 
             CardMaster = manager.LoadCardManager();
-            key = manager.LoadKey();
+            //key = manager.LoadKey();
             IsChildWindowClosed = true;
             
 
             ApplicationDirection = Directory.GetCurrentDirectory() + "/Media/" + currentSelectedBackground + ".mp4";
+
+            /*UStatus.Value = 440;
+            SaveUserStatus();*/
         }
 
         public void SaveLoadEmployers()
@@ -263,30 +266,44 @@ namespace WPFOperator.ViewModels
         private void CreateFileData(object o)
         {
             string file = "";
+            int NameLength = 30;
+
+            int[] ks = new int[1];
+            string[] vs = new string[1];
+
             foreach (EmployerObject EO in Employers)
             {
-                file += EO.FullName + "\t";
-                foreach (string ct in cardTypesDictionary.Values)
-                {
-                    int c = EO.CountCardByType(ct);
-                    if (c > 0) file += ct + "\t" + c;
-                }
-
-                /*int tabCount = 6;
-                bool firstLine = true;
-                for (int t = 0; t < tabCount - (EO.FullName.Length / 8); t++) file += "\t";*/
-
-                /*foreach (CardObject CO in EO.HandledCards)
-                {
-                    if (!firstLine) for (int t = 0; t < tabCount; t++) file += "\t";
-                    else firstLine = false;
-                    file += CO.Number;
-                    file += "\n";
-                }*/
                 
 
+                ks = new int[EO.HandledCards.Count];
+                vs = new string[EO.HandledCards.Count];
+
+                foreach (CardObject CO in EO.HandledCards)
+                {
+                    string t = CO.CardType;
+                    int h = 0;
+                    for (int i = 0; i < t.Length; i++) h += t[i];
+
+                    ks[h % ks.Length]++;
+                    vs[h % ks.Length] = CO.CardType;
+                }
+
+                for (int i = 0; i < vs.Length; i++)
+                {
+                    if (ks[i] != 0)
+                    {
+                        file += EO.FullName;
+
+                        if (EO.FullName.Length > NameLength)
+                            file += "\r";
+                        else
+                            for (int j = 0; j < NameLength - EO.FullName.Length; j++)
+                                file += " ";
+
+                        file += vs[i] + "   " + ks[i] + "\r";
+                    }
+                }
                 file += "\r";
-                //firstLine = true;
             }
 
             FileInfo fi = new FileInfo("C:/BitFiles");
@@ -303,27 +320,46 @@ namespace WPFOperator.ViewModels
         private void PrintFileData(object o)
         {
             string file = "";
+            int NameLength = 30;
+
+            int[] ks = new int[1];
+            string[] vs = new string[1];
+
             foreach (EmployerObject EO in Employers)
             {
-                file += EO.FullName + "\t";
-                foreach (string ct in cardTypesDictionary.Values)
-                {
-                    int c = EO.CountCardByType(ct);
-                    if (c > 0) file += ct + "\t" + c;
-                }
-                /*int tabCount = 6;
-                bool firstLine = true;
-                for (int t = 0; t < tabCount - (EO.FullName.Length / 8); t++) file += "\t";
+
+
+                ks = new int[EO.HandledCards.Count];
+                vs = new string[EO.HandledCards.Count];
 
                 foreach (CardObject CO in EO.HandledCards)
                 {
-                    if (!firstLine) for (int t = 0; t < tabCount; t++) file += "\t";
-                    else firstLine = false;
-                    file += CO.Number;
-                    file += "\n";
-                }*/
+                    string t = CO.CardType;
+                    int h = 0;
+                    for (int i = 0; i < t.Length; i++) h += t[i];
+
+                    ks[h % ks.Length]++;
+                    vs[h % ks.Length] = CO.CardType;
+                }
+
+                for (int i = 0; i < vs.Length; i++)
+                {
+                    if (ks[i] != 0)
+                    {
+                        file += EO.FullName;
+
+                        if (EO.FullName.Length > NameLength)
+                            file += "\r";
+                        else
+                            for (int j = 0; j < NameLength - EO.FullName.Length; j++)
+                                file += " ";
+
+                        file += vs[i] + "   " + ks[i] + "\r";
+                    }
+                }
                 file += "\r";
             }
+
             FileInfo fi = new FileInfo("C:/BitFiles");
             Directory.CreateDirectory(fi.FullName);
 
