@@ -238,6 +238,18 @@ namespace WPFOperator.ViewModels
             return false;
         }
 
+        public bool DeleteMasterCard()
+        {
+            CardObject CO = Card;
+            if (CardMaster.DeleteCard(CO))
+            {
+                Card = null;
+                SaveCardManager();
+                return true;
+            }
+            return false;
+        }
+
         public void SelectEmployer(EmployerObject EO)
         {
             Employer = EO;

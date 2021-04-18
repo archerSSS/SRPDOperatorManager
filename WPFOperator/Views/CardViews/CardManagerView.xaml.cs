@@ -84,5 +84,16 @@ namespace WPFOperator.Views.CardViews
             dt = new DateTime(dt.Year, dt.Month, dt.Day);
             ((MainViewModel)DataContext).AddMasterCard(number, t, dt);
         }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Хочешь удалить эту карту?", "Deletion", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+            if (ListMasterCards.SelectedItem != null)
+            {
+                if (((MainViewModel)DataContext).DeleteMasterCard()) MessageBox.Show("Как хочш, я удалил");
+                else MessageBox.Show("Увы, эту карту нельзя больше удалять. Прости :(");
+            }
+            else MessageBox.Show("Не выбрана карта. Подскажи что удалить, пж...");
+        }
     }
 }

@@ -42,6 +42,18 @@ namespace WPFOperator.Models
             CO.RemoveCard(date);
         }
 
+        public bool DeleteCard(CardObject CO)
+        {
+            if (CO.Actions.Count < 2)
+            {
+                DateTime dt = CO.Actions[0].GetDate();
+                HandledCards.Remove(CO);
+                CAH.DeleteAddAction(dt);
+                return true;
+            }
+            return false;
+        }
+
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
