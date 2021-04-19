@@ -332,7 +332,7 @@ namespace WPFOperator.ViewModels
         private void PrintFileData(object o)
         {
             string file = "";
-            int NameLength = 30;
+            int NameLength = 40;
 
             int[] ks = new int[1];
             string[] vs = new string[1];
@@ -369,7 +369,7 @@ namespace WPFOperator.ViewModels
                         file += vs[i] + "   " + ks[i] + "\r";
                     }
                 }
-                file += "\r";
+                //file += "\r";
             }
 
             FileInfo fi = new FileInfo("C:/BitFiles");
