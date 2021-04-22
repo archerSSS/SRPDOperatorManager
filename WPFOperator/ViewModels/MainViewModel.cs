@@ -481,6 +481,10 @@ namespace WPFOperator.ViewModels
 
         public void MasterTransfer(int mode, DateTime date)
         {
+            if (Card == null)
+            {
+                return;
+            }
             UStatus.UpdateValue(2);
             CollectedBits = UStatus.Value;
             SaveUserStatus();

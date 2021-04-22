@@ -36,6 +36,12 @@ namespace WPFOperator.Views.CardViews
 
         private void MasterTransferTo_Click(object sender, RoutedEventArgs e)
         {
+            if (ListMasterCards.SelectedItem == null || ComboEmployers.SelectedItem == null)
+            {
+                MessageBox.Show("Не выбрана карта или сотрудник которому надо передать карту.");
+                return;
+            }
+
             DateTime? dt = CalendarTransfer.SelectedDate;
 
             if (dt != null)
@@ -52,6 +58,12 @@ namespace WPFOperator.Views.CardViews
 
         private void MasterTransferFrom_Click(object sender, RoutedEventArgs e)
         {
+            if (ListMasterCards.SelectedItem == null)
+            {
+                MessageBox.Show("Не выбрана карта.");
+                return;
+            }
+
             DateTime? dt = CalendarTransfer.SelectedDate;
 
             if (dt != null)

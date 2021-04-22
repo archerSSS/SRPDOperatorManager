@@ -85,11 +85,14 @@
             <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Background="#155585" Margin="0,0,0,20"></Border>
-        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+        <TextBlock Grid.Row="1" Grid.Column="0" 
                    HorizontalAlignment="Center" VerticalAlignment="Bottom" 
                    FontSize="20" Text="Мастер Карт"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="{Binding Path=CardMaster.HandledCards.Count}"></TextBlock>
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" BorderBrush="DarkOrange" BorderThickness="2">
-            <ListBox x:Name="ListMasterCards" ItemsSource="{Binding Path=CardMaster.HandledCards}" SelectedItem="{Binding Path=Card}"></ListBox>
+            <ListBox x:Name="ListMasterCards" ItemsSource="{Binding Path=CardMaster.HandledCards}" 
+                     SelectedItem="{Binding Path=Card}"
+                     SelectionMode="Single"></ListBox>
         </Border>
         <Calendar x:Name="CalendarTransfer" Grid.Row="4" Grid.Column="2" Grid.RowSpan="2"></Calendar>
         <UniformGrid Grid.Row="2" Grid.Column="2" Rows="2">
@@ -111,7 +114,7 @@
             <Button Margin="20,40,20,0"
                 IsEnabled="{Binding Path=FancyOn}"
                 Visibility="{Binding Path=FancyVisibility}"
-                Click="MasterTransferTo_Click" 
+                Click="MasterTransferFrom_Click" 
                 Command="{Binding Path=ChildWindowCommand}"
                 Style="{StaticResource StyleButtonFrom}">
             </Button>
@@ -148,11 +151,14 @@
             </ComboBox>
         </Grid>
 
-        <ComboBox Grid.Row="1" Grid.Column="3" Margin="0,0,0,0" FontSize="16" 
+        <ComboBox x:Name="ComboEmployers" Grid.Row="1" Grid.Column="3" Margin="0,0,0,0" FontSize="16" 
                   ItemsSource="{Binding Path=Employers}" 
                   SelectedItem="{Binding Path=Employer}"></ComboBox>
+        <TextBlock Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="{Binding Path=Employer.HandledCards.Count}"></TextBlock>
         <Border Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="2" BorderBrush="DarkOrange" BorderThickness="2">
-            <ListBox ItemsSource="{Binding Path=Employer.HandledCards}" SelectedItem="{Binding Path=Card}"></ListBox>
+            <ListBox x:Name="ListEmployerCards" ItemsSource="{Binding Path=Employer.HandledCards}" 
+                     SelectedItem="{Binding Path=Card}"
+                     SelectionMode="Single"></ListBox>
         </Border>
 
         <MediaElement x:Name="MasterMedia" Panel.ZIndex="-1" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="6" LoadedBehavior="Play">
