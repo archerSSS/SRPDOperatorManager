@@ -277,7 +277,47 @@ namespace WPFOperator.ViewModels
 
         private void CreateFileData(object o)
         {
-            string file = "";
+            int rowCount = 0;
+            List<string> emps = new List<string>();
+
+            foreach (EmployerObject EO in Employers)
+            {
+                if (EO.HandledCards.Count != 0)
+                {
+                    rowCount += EO.HandledCards.Count;
+                }
+                else
+                {
+                    emps.Add(EO.FullName);
+                    rowCount++;
+                }
+            }
+
+            string[] names = new string[rowCount];
+            string[] numbers = new string[rowCount];
+            string[] types = new string[rowCount];
+
+            int counter = 0;
+            foreach (EmployerObject EO in Employers)
+            {
+                foreach (CardObject CO in EO.HandledCards)
+                {
+                    names[counter] = EO.FullName;
+                    numbers[counter] = CO.Number;
+                    types[counter] = CO.CardType;
+                    counter++;
+                }
+            }
+
+            int c = 0;
+            for (int i = names.Length - emps.Count; i < names.Length; i++)
+            {
+                names[i] = emps[c++];
+            }
+
+            ExcelManager EM = new ExcelManager();
+            EM.CreateXFile(names, types, numbers);
+            /*string file = "";
             int NameLength = 40;
 
             int[] ks = new int[1];
@@ -323,8 +363,8 @@ namespace WPFOperator.ViewModels
             
             StreamWriter sw = new StreamWriter("C:/BitFiles/BitFile.txt"); //"E:/BitFiles/BitFile.txt"
             sw.WriteLine(file);
-            sw.Close();
-            
+            sw.Close();*/
+
 
             //new DataPrinter();
         }
@@ -372,10 +412,16 @@ namespace WPFOperator.ViewModels
                 //file += "\r";
             }
 
-            FileInfo fi = new FileInfo("C:/BitFiles");
-            Directory.CreateDirectory(fi.FullName);
+            /*FileInfo fi = new FileInfo("C:/BitFiles");
+            Directory.CreateDirectory(fi.FullName);*/
+            //C:/OperatorManagerFiles
+            DirectoryInfo dir = new DirectoryInfo("C:/OperatorManagerFiles");
+            if (!dir.Exists)
+            {
+                dir.Create();
+            }
 
-            StreamWriter sw = new StreamWriter("C:/BitFiles/BitFile.txt");
+            StreamWriter sw = new StreamWriter("C:/OperatorManagerFiles/BitFile.txt");
 
             sw.WriteLine(file);
             sw.Close();

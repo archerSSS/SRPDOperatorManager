@@ -55,7 +55,13 @@ namespace WPFOperator
         {
             try
             {
-                streamToPrint = new StreamReader("C:/BitFiles/BitFile.txt");
+                DirectoryInfo dir = new DirectoryInfo("C:/OperatorManagerFiles");
+                if (!dir.Exists)
+                {
+                    dir.Create();
+                }
+
+                streamToPrint = new StreamReader("C:/OperatorManagerFiles/BitFile.txt");
                 try
                 {
                     font = new Font("Arial", 10);
