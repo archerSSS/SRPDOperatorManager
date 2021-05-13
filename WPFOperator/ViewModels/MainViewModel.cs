@@ -73,12 +73,6 @@ namespace WPFOperator.ViewModels
 
         public MainViewModel()
         {
-            /*SimpleVisibility = Visibility.Visible;
-            FancyVisibility = Visibility.Hidden;
-            SimpleOn = true;
-            FancyOn = false;*/
-            
-
             manager = new SaveManager();
             uStatus = manager.LoadUserStatus();
             UStatus.CheckLastRun(DateTime.Now);
@@ -317,56 +311,17 @@ namespace WPFOperator.ViewModels
 
             ExcelManager EM = new ExcelManager();
             EM.CreateXFile(names, types, numbers);
-            /*string file = "";
-            int NameLength = 40;
 
-            int[] ks = new int[1];
-            string[] vs = new string[1];
+
 
             foreach (EmployerObject EO in Employers)
             {
-                
-
-                ks = new int[EO.HandledCards.Count];
-                vs = new string[EO.HandledCards.Count];
 
                 foreach (CardObject CO in EO.HandledCards)
                 {
-                    string t = CO.CardType;
-                    int h = 0;
-                    for (int i = 0; i < t.Length; i++) h += t[i];
 
-                    ks[h % ks.Length]++;
-                    vs[h % ks.Length] = CO.CardType;
                 }
-
-                for (int i = 0; i < vs.Length; i++)
-                {
-                    if (ks[i] != 0)
-                    {
-                        file += EO.FullName;
-
-                        if (EO.FullName.Length > NameLength)
-                            file += "\r";
-                        else
-                            for (int j = 0; j < NameLength - EO.FullName.Length; j++)
-                                file += " ";
-
-                        file += vs[i] + "   " + ks[i] + "\r";
-                    }
-                }
-                //file += "\r";
             }
-
-            FileInfo fi = new FileInfo("C:/BitFiles");
-            Directory.CreateDirectory(fi.FullName);
-            
-            StreamWriter sw = new StreamWriter("C:/BitFiles/BitFile.txt"); //"E:/BitFiles/BitFile.txt"
-            sw.WriteLine(file);
-            sw.Close();*/
-
-
-            //new DataPrinter();
         }
 
         private void PrintFileData(object o)

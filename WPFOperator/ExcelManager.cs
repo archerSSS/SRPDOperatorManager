@@ -12,12 +12,18 @@ namespace WPFOperator
     {
         private ExcelPackage ep;
         private int currentRow;
+        private string firstColumn;
+        private string secondColumn;
+        private string thirdColumn;
 
         public ExcelManager()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ep = new ExcelPackage();
             currentRow = 1;
+            firstColumn = "";
+            secondColumn = "";
+            thirdColumn = "";
         }
 
         public void CreateXFile(string[] names, string[] types, string[] nums)
@@ -43,6 +49,42 @@ namespace WPFOperator
             byte[] bts = ep.GetAsByteArray();
             fs.Write(bts, 0, bts.Length);
             fs.Close();
+        }
+
+        public void CreateList(string name)
+        {
+            ep.Workbook.Worksheets.Add(name);
+        }
+
+        public void SetFirstColumn(string t)
+        {
+            firstColumn = t;
+        }
+
+        public void SetSecondColumn(string t)
+        {
+            secondColumn = t;
+        }
+
+        public void SetThirdColumn(string t)
+        {
+            thirdColumn = t;
+        }
+
+        public void AddRowSecond(string t)
+        {
+            var sheet = ep.Workbook.Worksheets[0];
+            if (firstColumn != "" && thirdColumn != "")
+            {
+                sheet.Cells["B" + currentRow].Value = t;
+                currentRow++;
+            }
+        }
+
+        public void SetCellValue(string cell, string value)
+        {
+            var sheet = ep.Workbook.Worksheets[0];
+            sheet.Cells[cell].Value = value;
         }
     }
 }
