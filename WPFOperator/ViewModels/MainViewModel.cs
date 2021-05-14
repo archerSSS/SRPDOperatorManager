@@ -315,19 +315,19 @@ namespace WPFOperator.ViewModels
 
             EM = new ExcelManager();
             EM.CreateList("Cards and Employers");
-            string[] dic = new string[cardTypesDictionary.Count];
-            for (int i = 0; i < dic.Length; i++)
+            string[] dic = new string[cardTypesDictionary.Count + 1];
+            for (int i = 1; i < dic.Length; i++)
             {
                 dic[i] = cardTypesDictionary[i];
             }
 
-            int cRow = 0;
+            int cRow = 1;
             foreach (EmployerObject EO in Employers)
             {
-                int[] typeCounter = new int[dic.Length];
+                int[] typeCounter = new int[dic.Length + 1];
                 foreach (CardObject CO in EO.HandledCards)
                 {
-                    for (int i = 0; i < dic.Length; i++)
+                    for (int i = 1; i < dic.Length; i++)
                     {
                         if (CO.CardType == dic[i])
                         {
@@ -356,7 +356,7 @@ namespace WPFOperator.ViewModels
                     EM.SetCellValue(0, "B" + cRow, "0");
                 }
             }
-
+            EM.CreateXFile();
 
         }
 
