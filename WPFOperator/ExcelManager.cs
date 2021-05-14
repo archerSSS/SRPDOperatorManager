@@ -51,6 +51,23 @@ namespace WPFOperator
             fs.Close();
         }
 
+        public void CreateXFile()
+        {
+            var sheet = ep.Workbook.Worksheets[0];
+
+
+            DirectoryInfo dir = new DirectoryInfo("C:/OperatorManagerFiles");
+            if (!dir.Exists)
+            {
+                dir.Create();
+            }
+
+            FileStream fs = new FileStream("C:/OperatorManagerFiles/Cards and Employers.xlsx", FileMode.Create);
+            byte[] bts = ep.GetAsByteArray();
+            fs.Write(bts, 0, bts.Length);
+            fs.Close();
+        }
+
         public void CreateList(string name)
         {
             ep.Workbook.Worksheets.Add(name);
@@ -81,9 +98,9 @@ namespace WPFOperator
             }
         }
 
-        public void SetCellValue(string cell, string value)
+        public void SetCellValue(int list, string cell, string value)
         {
-            var sheet = ep.Workbook.Worksheets[0];
+            var sheet = ep.Workbook.Worksheets[list];
             sheet.Cells[cell].Value = value;
         }
     }

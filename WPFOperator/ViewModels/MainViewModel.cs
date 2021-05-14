@@ -313,15 +313,51 @@ namespace WPFOperator.ViewModels
             EM.CreateXFile(names, types, numbers);
 
 
+            EM = new ExcelManager();
+            EM.CreateList("Cards and Employers");
+            string[] dic = new string[cardTypesDictionary.Count];
+            for (int i = 0; i < dic.Length; i++)
+            {
+                dic[i] = cardTypesDictionary[i];
+            }
 
+            int cRow = 0;
             foreach (EmployerObject EO in Employers)
             {
-
+                int[] typeCounter = new int[dic.Length];
                 foreach (CardObject CO in EO.HandledCards)
                 {
+                    for (int i = 0; i < dic.Length; i++)
+                    {
+                        if (CO.CardType == dic[i])
+                        {
+                            typeCounter[i]++;
+                            break;
+                        }
+                    }
+                }
 
+                bool haveCards = false;
+                for (int i = 0; i < typeCounter.Length; i++)
+                {
+                    if (typeCounter[i] != 0)
+                    {
+                        EM.SetCellValue(0, "A" + cRow, EO.FullName);
+                        EM.SetCellValue(0, "B" + cRow, "" + typeCounter[i]);
+                        EM.SetCellValue(0, "C" + cRow, dic[i]);
+                        cRow++;
+                        haveCards = true;
+                    }
+                }
+
+                if (!haveCards)
+                {
+                    EM.SetCellValue(0, "A" + cRow, EO.FullName);
+                    EM.SetCellValue(0, "B" + cRow, "0");
                 }
             }
+
+
         }
 
         private void PrintFileData(object o)
