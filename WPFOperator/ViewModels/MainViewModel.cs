@@ -321,41 +321,46 @@ namespace WPFOperator.ViewModels
                 dic[i] = cardTypesDictionary[i];
             }
 
+            List<string> cardLessEmployers = new List<string>();
             int cRow = 1;
             foreach (EmployerObject EO in Employers)
             {
-                int[] typeCounter = new int[dic.Length + 1];
-                foreach (CardObject CO in EO.HandledCards)
+                if (EO.HandledCards.Count == 0) cardLessEmployers.Add(EO.FullName);
+                else
                 {
-                    for (int i = 1; i < dic.Length; i++)
+                    int[] typeCounter = new int[dic.Length + 1];
+                    foreach (CardObject CO in EO.HandledCards)
                     {
-                        if (CO.CardType == dic[i])
+                        for (int i = 1; i < dic.Length; i++)
                         {
-                            typeCounter[i]++;
-                            break;
+                            if (CO.CardType == dic[i])
+                            {
+                                typeCounter[i]++;
+                                break;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < typeCounter.Length; i++)
+                    {
+                        if (typeCounter[i] != 0)
+                        {
+                            EM.SetCellValue(0, "A" + cRow, EO.FullName);
+                            EM.SetCellValue(0, "B" + cRow, "" + typeCounter[i]);
+                            EM.SetCellValue(0, "C" + cRow, dic[i]);
+                            cRow++;
                         }
                     }
                 }
-
-                bool haveCards = false;
-                for (int i = 0; i < typeCounter.Length; i++)
-                {
-                    if (typeCounter[i] != 0)
-                    {
-                        EM.SetCellValue(0, "A" + cRow, EO.FullName);
-                        EM.SetCellValue(0, "B" + cRow, "" + typeCounter[i]);
-                        EM.SetCellValue(0, "C" + cRow, dic[i]);
-                        cRow++;
-                        haveCards = true;
-                    }
-                }
-
-                if (!haveCards)
-                {
-                    EM.SetCellValue(0, "A" + cRow, EO.FullName);
-                    EM.SetCellValue(0, "B" + cRow, "0");
-                }
             }
+
+            foreach (string em in cardLessEmployers)
+            {
+                EM.SetCellValue(0, "A" + cRow, em);
+                EM.SetCellValue(0, "B" + cRow, "0");
+                cRow++;
+            }
+            
             EM.CreateXFile();
 
         }
