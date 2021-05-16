@@ -363,6 +363,33 @@ namespace WPFOperator.ViewModels
                 }
             }
 
+            int[] typeCounterMaster = new int[dic.Length + 1];
+            foreach (CardObject CO in CardMaster.HandledCards)
+            {
+                
+                for (int i = 1; i < dic.Length; i++)
+                {
+                    if (CO.CardType == dic[i])
+                    {
+                        typeCounterMaster[i]++;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < typeCounterMaster.Length; i++)
+            {
+                if (typeCounterMaster[i] != 0)
+                {
+                    EM.SetCellValue(0, "A" + cRow, "Главный Держатель Карт");
+                    EM.SetCellValue(0, "B" + cRow, "" + typeCounterMaster[i]);
+                    EM.SetCellValue(0, "C" + cRow, dic[i]);
+                    cRow++;
+                }
+            }
+
+
+
             foreach (string em in cardLessEmployers)
             {
                 EM.SetCellValue(0, "A" + cRow, em);
