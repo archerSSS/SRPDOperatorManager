@@ -20,7 +20,7 @@ namespace WPFOperator
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ep = new ExcelPackage();
-            currentRow = 1;
+            currentRow = 0;
             firstColumn = "";
             secondColumn = "";
             thirdColumn = "";
@@ -33,11 +33,11 @@ namespace WPFOperator
             
             for (; currentRow < names.Length; currentRow++)
             {
-                sheet.Cells["A" + currentRow].Value = names[currentRow - 1];
-                sheet.Cells["B" + currentRow].Value = nums[currentRow - 1];
-                sheet.Cells["C" + currentRow].Value = types[currentRow - 1];
+                sheet.Cells["A" + (currentRow + 1)].Value = names[currentRow];
+                sheet.Cells["B" + (currentRow + 1)].Value = nums[currentRow];
+                sheet.Cells["C" + (currentRow + 1)].Value = types[currentRow];
             }
-            currentRow = 1;
+            currentRow = 0;
 
             DirectoryInfo dir = new DirectoryInfo("C:/OperatorManagerFiles");            
             if (!dir.Exists)

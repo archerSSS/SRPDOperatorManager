@@ -286,21 +286,30 @@ namespace WPFOperator.ViewModels
                     rowCount++;
                 }
             }
+            rowCount += CardMaster.HandledCards.Count;
 
             string[] names = new string[rowCount];
             string[] numbers = new string[rowCount];
             string[] types = new string[rowCount];
 
-            int counter = 0;
+            int pos = 0;
             foreach (EmployerObject EO in Employers)
             {
                 foreach (CardObject CO in EO.HandledCards)
                 {
-                    names[counter] = EO.FullName;
-                    numbers[counter] = CO.Number;
-                    types[counter] = CO.CardType;
-                    counter++;
+                    names[pos] = EO.FullName;
+                    numbers[pos] = CO.Number;
+                    types[pos] = CO.CardType;
+                    pos++;
                 }
+            }
+
+            foreach (CardObject CO in CardMaster.HandledCards)
+            {
+                names[pos] = "Главный Держатель Карт";
+                numbers[pos] = CO.Number;
+                types[pos] = CO.CardType;
+                pos++;
             }
 
             int c = 0;
