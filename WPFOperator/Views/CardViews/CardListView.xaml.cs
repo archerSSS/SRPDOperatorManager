@@ -365,7 +365,8 @@ namespace WPFOperator.Views
 
         private void CreateFile_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Файл будет создан и расположен по адресу: C:/OperatorManagerFiles/OperatorCards.xlsx");
+            string direction = Directory.GetCurrentDirectory() + "\\Excel Files\\" + "CardHolders_Report.xlsx";
+            MessageBox.Show("Файл будет создан и расположен по адресу: " + direction);
         }
 
         private void MasterCardView_Click(object sender, RoutedEventArgs e)

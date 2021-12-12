@@ -19,11 +19,23 @@ namespace WPFOperator
         public ExcelManager()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            ep = new ExcelPackage();
+            /*ep = new ExcelPackage();
             currentRow = 0;
             firstColumn = "";
             secondColumn = "";
-            thirdColumn = "";
+            thirdColumn = "";*/
+        }
+
+        public void CreateXFile(string filename)
+        {
+            DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory() + "/Excel Files");
+            if (!dir.Exists)
+            {
+                dir.Create();
+            }
+
+            DeleteIfExist(dir + "/" + filename + ".xlsx");
+            ep = new ExcelPackage(new FileInfo(dir + "/" + filename + ".xlsx"));
         }
 
         public void CreateXFile(string[] names, string[] types, string[] nums)
@@ -39,7 +51,7 @@ namespace WPFOperator
             }
             currentRow = 0;
 
-            DirectoryInfo dir = new DirectoryInfo("C:/OperatorManagerFiles");            
+            DirectoryInfo dir = new DirectoryInfo("C:/OperatorManagerFiles");
             if (!dir.Exists)
             {
                 dir.Create();
@@ -68,9 +80,41 @@ namespace WPFOperator
             fs.Close();
         }
 
-        public void CreateList(string name)
+
+        public void CreateSheet(string name)
         {
             ep.Workbook.Worksheets.Add(name);
+        }
+
+        public void PutExcelData(string address, int value)
+        {
+            ep.Workbook.Worksheets[0].Cells[address].Value = value;
+        }
+
+        public void PutExcelData(string address, string value)
+        {
+            ep.Workbook.Worksheets[0].Cells[address].Value = value;
+        }
+
+        public void PutExcelData(string address, DateTime value)
+        {
+
+        }
+
+        public void PutExcelData(string address, object value)
+        {
+
+        }
+
+        private void DeleteIfExist(string dir)
+        {
+            if (IsFileExist(dir)) new FileInfo(dir).Delete();
+        }
+
+        private bool IsFileExist(string dir)
+        {
+            FileInfo fileinfo = new FileInfo(dir);
+            return fileinfo.Exists;
         }
 
         public void SetFirstColumn(string t)
@@ -102,6 +146,11 @@ namespace WPFOperator
         {
             var sheet = ep.Workbook.Worksheets[list];
             sheet.Cells[cell].Value = value;
+        }
+
+        public void Save()
+        {
+            ep.SaveAsync();
         }
     }
 }

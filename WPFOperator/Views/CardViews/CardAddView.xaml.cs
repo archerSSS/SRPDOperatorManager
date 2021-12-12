@@ -137,7 +137,27 @@ namespace WPFOperator.Views.CardViews
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if (ListCards.SelectedItem != null)
+            if (ListCards.SelectedItem == null)
+            {
+                MessageBox.Show("Не выбрана карта.");
+                return;
+            }
+
+            DateTime? dt = CalendarCard.SelectedDate;
+
+            if (dt != null)
+            {
+                MainViewModel MVM = (MainViewModel)DataContext;
+                MVM.MasterTransfer(1, dt.Value);
+            }
+            else if (MessageBox.Show("Дата не выбрана, выбрать сегодняшний день?", "Alert", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
+            {
+                MainViewModel MVM = (MainViewModel)DataContext;
+                MVM.MasterTransfer(1, DateTime.Now);
+            }
+
+
+            /*if (ListCards.SelectedItem != null)
             {
                 if (MessageBox.Show("Хочешь чтобы я забрал у сотрудника эту карту? \r" + ListCards.SelectedItem, "Alert", MessageBoxButton.YesNo) == MessageBoxResult.No) return;
 
@@ -153,7 +173,7 @@ namespace WPFOperator.Views.CardViews
                 {
                     DateTime? calendarDate = CalendarCard.SelectedDate;
                     DateTime dt = DateTime.Now;
-                    
+
                     if (calendarDate != null)
                     {
                         dt = calendarDate.Value;
@@ -163,7 +183,7 @@ namespace WPFOperator.Views.CardViews
                     DateTime date = new DateTime(dt.Year, dt.Month, dt.Day);
                     ((MainViewModel)DataContext).ReturnCard(date);
                 }
-            }
+            }*/
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)

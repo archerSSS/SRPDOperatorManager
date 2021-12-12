@@ -271,134 +271,57 @@ namespace WPFOperator.ViewModels
 
         private void CreateFileData(object o)
         {
-            int rowCount = 0;
-            List<string> emps = new List<string>();
+            List<string> list_employer_names = new List<string>();
+            List<int> list_card_counter = new List<int>();
+            List<string> list_types = new List<string>();
 
+            Dictionary<string, int> cardTypesAmount = new Dictionary<string, int>();
             foreach (EmployerObject EO in Employers)
             {
                 if (EO.HandledCards.Count != 0)
                 {
-                    rowCount += EO.HandledCards.Count;
-                }
-                else
-                {
-                    emps.Add(EO.FullName);
-                    rowCount++;
-                }
-            }
-            rowCount += CardMaster.HandledCards.Count;
-
-            string[] names = new string[rowCount];
-            string[] numbers = new string[rowCount];
-            string[] types = new string[rowCount];
-
-            int pos = 0;
-            foreach (EmployerObject EO in Employers)
-            {
-                foreach (CardObject CO in EO.HandledCards)
-                {
-                    names[pos] = EO.FullName;
-                    numbers[pos] = CO.Number;
-                    types[pos] = CO.CardType;
-                    pos++;
-                }
-            }
-
-            foreach (CardObject CO in CardMaster.HandledCards)
-            {
-                names[pos] = "Главный Держатель Карт";
-                numbers[pos] = CO.Number;
-                types[pos] = CO.CardType;
-                pos++;
-            }
-
-            int c = 0;
-            for (int i = names.Length - emps.Count; i < names.Length; i++)
-            {
-                names[i] = emps[c++];
-            }
-
-            ExcelManager EM = new ExcelManager();
-            EM.CreateXFile(names, types, numbers);
-
-
-            EM = new ExcelManager();
-            EM.CreateList("Cards and Employers");
-            string[] dic = new string[cardTypesDictionary.Count + 1];
-            for (int i = 1; i < dic.Length; i++)
-            {
-                dic[i] = cardTypesDictionary[i];
-            }
-
-            List<string> cardLessEmployers = new List<string>();
-            int cRow = 1;
-            foreach (EmployerObject EO in Employers)
-            {
-                if (EO.HandledCards.Count == 0) cardLessEmployers.Add(EO.FullName);
-                else
-                {
-                    int[] typeCounter = new int[dic.Length + 1];
                     foreach (CardObject CO in EO.HandledCards)
                     {
-                        for (int i = 1; i < dic.Length; i++)
+                        if (cardTypesAmount.ContainsKey(CO.CardType))
                         {
-                            if (CO.CardType == dic[i])
-                            {
-                                typeCounter[i]++;
-                                break;
-                            }
+                            cardTypesAmount[CO.CardType]++;
+                        }
+                        else
+                        {
+                            cardTypesAmount.Add(CO.CardType, 1);
                         }
                     }
 
-                    for (int i = 0; i < typeCounter.Length; i++)
+                    foreach (string key in cardTypesAmount.Keys)
                     {
-                        if (typeCounter[i] != 0)
-                        {
-                            EM.SetCellValue(0, "A" + cRow, EO.FullName);
-                            EM.SetCellValue(0, "B" + cRow, "" + typeCounter[i]);
-                            EM.SetCellValue(0, "C" + cRow, dic[i]);
-                            cRow++;
-                        }
+                        list_employer_names.Add(EO.FullName);
+                        list_card_counter.Add(cardTypesAmount[key]);
+                        list_types.Add(key);
                     }
-                }
-            }
 
-            int[] typeCounterMaster = new int[dic.Length + 1];
-            foreach (CardObject CO in CardMaster.HandledCards)
-            {
-                
-                for (int i = 1; i < dic.Length; i++)
+                    cardTypesAmount.Clear();
+                }
+                else
                 {
-                    if (CO.CardType == dic[i])
-                    {
-                        typeCounterMaster[i]++;
-                        break;
-                    }
+                    list_employer_names.Add(EO.FullName);
+                    list_card_counter.Add(0);
+                    list_types.Add("Нет носителей");
                 }
             }
 
-            for (int i = 0; i < typeCounterMaster.Length; i++)
+            ExcelManager excelManager = new ExcelManager();
+            excelManager.CreateXFile("CardHolders_Report");
+            excelManager.CreateSheet("Card Holders Report");
+
+            for (int i = 0; i < list_employer_names.Count; i++)
             {
-                if (typeCounterMaster[i] != 0)
-                {
-                    EM.SetCellValue(0, "A" + cRow, "Главный Держатель Карт");
-                    EM.SetCellValue(0, "B" + cRow, "" + typeCounterMaster[i]);
-                    EM.SetCellValue(0, "C" + cRow, dic[i]);
-                    cRow++;
-                }
+                excelManager.PutExcelData("A" + (i + 1), list_employer_names[i]);
+                excelManager.PutExcelData("B" + (i + 1), list_card_counter[i].ToString());
+                excelManager.PutExcelData("C" + (i + 1), list_types[i]);
             }
 
-
-
-            foreach (string em in cardLessEmployers)
-            {
-                EM.SetCellValue(0, "A" + cRow, em);
-                EM.SetCellValue(0, "B" + cRow, "0");
-                cRow++;
-            }
+            excelManager.Save();
             
-            EM.CreateXFile();
-
         }
 
         private void PrintFileData(object o)
